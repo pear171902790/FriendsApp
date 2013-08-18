@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<div id="div1">
+<div id="divA">
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br/>
+<script>
+	document.getElementById('divA').onload=function(){
+			alert('aaaaaaaaaaaaaaaaaaa');
+		};
+		var p='pppppppp';
+</script>
+</div>
+</div>
+<input type="button" value="ccc" id="ccc"/>
+<input type="button" value="showp" id="show"/>
+<a href="test2.html">test2</a>
+</body>
+<script>
+	document.getElementById('ccc').addEventListener('click',
+													function(){
+															var div1=document.getElementById('div1');
+															var divA=document.getElementById('divA');
+															div1.removeChild(divA);
+															var divB=document.createElement('div');
+															divB.id='divB';
+															divB.innerHTML='bbbbbbbbbbbbbbbbbbbb';
+															var s=document.createElement('script');
+															s.innerHTML=
+			'document.getElementById("divB").onload=function(){alert("bbbbbbbbbbbbbbbbb");}';
+															divB.appendChild(s);
+															div1.appendChild(divB);
+															alert(div1.innerHTML);
+															
+															/*var body1=document.getElementsByTagName('body')[0];
+															body1.removeChild(div1);
+															alert(body1.innerHTML);*/
+														},
+														false);
+			document.getElementById('show').addEventListener('click',function(){alert(p)},false);
+	
+</script>
+</html>

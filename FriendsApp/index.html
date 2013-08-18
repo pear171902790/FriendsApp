@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title></title>
+    
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.3.1.min.css">
+</head>
+<body>
+    <div data-role="page" id="friends">
+        <div data-role="header" data-theme="b" id='i-header'>
+            <a href="#" data-role="none"></a>
+            <h1>朋友们</h1>
+            <a href="addFriend.html" id="add" data-transition="slide" data-role="button" data-mini="true" data-inline="true" data-icon="plus" data-theme="b" data-iconpos="notext"></a>
+        </div>
+        <div data-role="content" id="i-content">
+            <ul data-role="listview" data-inset="true" id="show" data-theme="e">
+            </ul>
+        </div>
+        <div data-role="footer" id="i-footer" data-id="foo1" data-position="fixed" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#">朋友圈</a></li>
+                    <li><a href="nearby.html">附近的人</a></li>
+                </ul>
+            </div>
+        </div>
+        <script src="Scripts/index.js"></script>
+    </div>
+    
+    <script src="Scripts/jquery-2.0.3.min.js"></script>
+    <script src="Scripts/jquery.mobile-1.3.1.min.js"></script>
+    <script src="Scripts/cordova.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=182409ed20af33bd48ca1cc0c99f92b1"></script>
+    <script src="Scripts/convertor.js"></script>
+    <script>
+        var currentFriend = '';
+		var q='qqqqqqqqqqqqqqqqq';
+    </script>
+</body>
+</html>

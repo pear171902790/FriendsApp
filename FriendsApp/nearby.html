@@ -1,0 +1,73 @@
+<div data-role="page" id="nearby">
+        <div data-role="header" data-theme="b">
+            <h1>附近的人</h1>
+        </div>
+        <div data-role="content">
+            <div id="n-container" style="height:550px;width:400px">
+        	</div> 
+             
+        </div>
+        <div data-role="footer" data-position="fixed" data-theme="b">
+            <div data-role="navbar">
+                <ul>
+                   <li><a href="#friends">朋友圈</a></li>
+                    <li><a href="#">附近的人</a></li>
+                </ul>
+            </div>
+        </div>
+        <script>
+
+		var getInfo=function(friend){
+			return '<div><img style="float:left;margin:4px" src="'+friend.img+'" width="50" height="50"/>' + 
+			'<h4>'+friend.name+'</h4><p>电话 <a href="tel:'+friend.tel+'">'+friend.tel+'</a>, 邮箱 '+friend.email+'</p></div>';
+		};
+		
+        var addFriendsLabel=function(map,friend){
+			var point=new BMap.Point(friend.address.lng,friend.address.lat);
+			var label = new BMap.Label(friend.name);
+			var infoWindow = new BMap.InfoWindow(getInfo(friend),{width:100,height:100,enableMessage:false});
+			var marker = new BMap.Marker(point);
+			marker.setLabel(label);
+			map.addOverlay(marker); 
+			marker.addEventListener('click', function(){          
+											  this.openInfoWindow(infoWindow);
+											  });
+		}
+		
+		var onTranslateSuccess=function(point){
+			var map = new BMap.Map('n-container');
+			map.centerAndZoom(point, 15);
+			var label = new BMap.Label('您的当前位置');
+			var marker = new BMap.Marker(point);
+			marker.setLabel(label);
+			map.addOverlay(marker);  
+			var strFriends = local.getItem('friends');
+			if (strFriends) {
+				var friends = JSON.parse(strFriends);
+				for (var i = 0; i <friends.length; i++) {
+					var friend = friends[i];
+					addFriendsLabel(map,friend);
+				}
+			}
+		}
+		
+		
+       var onGetCurrentPositionSuccess=function(position) {
+				var gpsPoint = new BMap.Point(position.coords.longitude, position.coords.latitude);  
+                BMap.Convertor.translate(gpsPoint,0,onTranslateSuccess);											
+		}
+		
+		var onGetCurrentPositionError=function(error) {
+			alert('code: '    + error.code    + '\n' +
+				'message: ' + error.message + '\n');
+		}
+		
+		var onDeviceReady=function() {
+			navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onGetCurrentPositionError);
+		}
+		
+		document.addEventListener("deviceready", onDeviceReady, false);
+    </script>
+    </div>
+     
+		

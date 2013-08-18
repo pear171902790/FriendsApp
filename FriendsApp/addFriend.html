@@ -1,0 +1,172 @@
+<div data-role="page" id="addFriend">
+  <div data-role="header" data-theme="b" id="af-header"> <a href="#friends" data-transition="slide" id="af-back" data-iconpos="notext" data-icon="back" data-direction="reverse"></a>
+    <h1>添加朋友</h1>
+    <a href="#" id="af-save" data-iconpos="notext" data-icon="check"></a> </div>
+  <div data-role="content" data-theme="e" id="af-content"> <a href="#af-contact" data-role="button" data-rel="popup" data-position-to="window" data-transition="fade" id="selectFromContacts">从联系人中选择</a>
+    <div data-role="popup" id="af-contact" data-overlay-theme="a" data-theme="d" data-corners="false"> <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right" id="closeContactList">Close</a>
+      <div style="width:300px;height:400px;overflow:scroll" >
+        <ul data-role="listview" data-inset="true" id="contactList" data-theme="d">
+        </ul>
+      </div>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="af-name"> 姓名 </label>
+      <input id="af-name" type="text" />
+    </div>
+    <div data-role="fieldcontain">
+      <label for="af-img"> 头像 </label>
+      <a href="#" data-role="button" id="takePic">拍照</a> <a href="#" data-role="button" id="getPic">从相册选择</a> <img id="af-img" style="display: none; width: 60px; height: 60px;" src="" /> </div>
+    <div data-role="fieldcontain">
+      <label for="af-age"> 年龄 </label>
+      <input type="range" name="slider" id="af-age" value="25" min="0" max="100" />
+    </div>
+    <div data-role="fieldcontain">
+      <label> 地址 </label>
+      <div data-role="collapsible" data-theme="e" data-content-theme="e" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+        <h4 id='toggleMap'>标注地理位置</h4>
+        <select id="selCity" data-mini="true">
+          <option value="西安">西安</option>
+          <option value="北京">北京</option>
+          <option vlaue="上海">上海</option>
+        </select>
+        <div id="af-container" style="height:400px;width:300px"> </div>
+      </div>
+    </div>
+    <div data-role="fieldcontain">
+      <label for="af-email"> 邮箱 </label>
+      <input id="af-email" type="email" />
+    </div>
+    <div data-role="fieldcontain">
+      <label for="af-tel"> 电话 </label>
+      <input id="af-tel" type="tel" />
+    </div>
+  </div>
+  <style>
+			
+  </style>
+  <script>
+      alert(window.p);
+      alert(window.q);
+		var picSrcType;
+		var desType;
+		var img = document.getElementById('af-img');
+		var local = window.localStorage;
+		var friends = local.getItem('friends') ? JSON.parse(local.getItem('friends')) :[];
+		var addressPoint={lng:0,lat:0};
+		
+		//var onTranslateSuccess=function(point){
+		var map = new BMap.Map('af-container');
+		map.centerAndZoom('西安', 15);
+		map.addEventListener('click',
+							function(e){
+								  addressPoint.lng=e.point.lng;
+								  addressPoint.lat=e.point.lat;
+								  map.clearOverlays();
+								  var marker = 
+									  new BMap.Marker(
+									  new BMap.Point(addressPoint.lng,addressPoint.lat)); 																			
+								  map.addOverlay(marker); 
+								  alert('标注成功');
+							});
+		//};
+		
+		
+		$('#selCity').change(function(){
+			map.setCenter($(this).val());
+		});
+			
+			/*var onGetCurrentPositionSuccess=function(position){
+				var gpsPoint = new BMap.Point(position.coords.longitude, position.coords.latitude);  
+				BMap.Convertor.translate(gpsPoint,0,onTranslateSuccess);
+			};*/
+			
+			/*var onGetCurrentPositionError=function(error){
+				alert('code: '    + error.code    + '\n message: ' + error.message + '\n');
+			};*/
+			
+			
+			var fillFields=function(){
+					var obj=window.event.srcElement;
+					$('#af-name').val($(obj).attr('data-name'));
+					$('#af-tel').val($(obj).attr('data-tel'));
+					$('#af-email').val($(obj).attr('data-email'));
+					$("#closeContactList").trigger("click");
+				};
+			
+			var onGetAllContactsSuccess=function(contacts) {
+				var contactListHtml='';
+				for (var i=0; i<contacts.length; i++) {
+					var contact=contacts[i];
+					if(contact){
+						var name=contact.displayName?contact.displayName:'';
+						var tel=contact.phoneNumbers?contact.phoneNumbers[0].value:'';
+						var email=contact.emails?contact.emails[0].value:'';
+						contactListHtml += '<li data-theme="d" data-icon="check"><a href="#" onclick="fillFields()" data-name="'+name+'" data-tel="'+tel+'" data-email="'+email+'">'+name+'</a></li>';
+					}
+				}
+				$('#contactList').html(contactListHtml);
+				$("#contactList").listview("refresh");
+			};
+			
+			var onGetAllContactsError=function(){
+					alert('获取联系人失败');
+				};
+				
+			
+			$('#selectFromContacts').click(function(){
+					var options = new ContactFindOptions();
+					options.multiple = true;  
+					filter = ["displayName","phoneNumbers","emails"];
+					navigator.contacts.find(filter, onGetAllContactsSuccess,onGetAllContactsError, options);
+				});	
+				
+			
+			var onDeviceReady=function() {
+				//navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess,onGetCurrentPositionError);
+				picSrcType = navigator.camera.PictureSourceType;
+				desType = navigator.camera.DestinationType;
+			};
+			
+			var showPicFromUrl=function(imgUrl) {
+				img.style.display = 'block';
+				img.src = imgUrl;
+			};
+	
+			var showPicFromData=function(picData) {
+				img.style.display = 'block';
+				img.src = 'data:image/jpeg;base64,' + picData;
+			};
+	
+			var onError=function(msg) {
+				alert(msg);
+			};
+			
+			
+			
+			
+			$('#takePic').bind('click', function () {
+				navigator.camera.getPicture(showPicFromData, onError, { quality: 50, destinationType: desType.DATA_URL });
+			});
+			$('#getPic').bind('click', function () {
+				navigator.camera.getPicture(showPicFromUrl, onError, { quality: 50, destinationType: desType.FILE_URI, sourceType: picSrcType.PHOTOLIBRARY });
+			});
+			
+			$('#af-save').bind('click', function () {
+				var name = $('#af-name').val();
+				var img = $('#af-img').attr('src');
+				var age = $('#af-age').val();
+				var email = $('#af-email').val();
+				var tel = $('#af-tel').val();
+				var friend = new Friend(name, img, age, addressPoint, email, tel);
+				friends[friends.length] = friend;
+				var strFriends = JSON.stringify(friends);
+				var strFriend=JSON.stringify(friend);
+				local.setItem(friend.name,strFriend);
+				local.setItem('friends', strFriends);
+				location.href='index.html';
+			});
+			
+			document.addEventListener('deviceready', onDeviceReady, false);
+			
+		</script> 
+</div>
