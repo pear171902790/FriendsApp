@@ -1,0 +1,43 @@
+﻿<div data-role="page" id="addFriend">
+    <div data-role="header" data-theme="b" id="e-header" data-position="fixed">
+        <a href="details.html" data-transition="slide" id="toDetails" data-iconpos="notext" data-icon="back" data-direction="reverse"></a>
+        <h1>编辑</h1>
+        <a href="#" id="e-save" data-iconpos="notext" data-icon="check" data-transition="slide" data-direction="reverse"></a>
+    </div>
+    <div data-role="content" data-theme="e">
+        <div data-role="fieldcontain">
+            <label for="e-name">姓名 </label>
+            <input id="e-name" type="text" data-clear-btn="true"/>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="e-pic">头像 </label>
+            <a href="#" data-role="button" id="takePic">拍照</a> <a href="#" data-role="button" id="getPic">从相册选择</a>
+            <img id="e-pic" style="width: 60px; height: 60px;" src="" />
+        </div>
+        <div data-role="fieldcontain">
+            <label for="e-age">年龄 </label>
+            <input type="range" name="slider" id="e-age" min="0" max="100" />
+        </div>
+        <div data-role="fieldcontain">
+            <label>地址 </label>
+            <div data-role="collapsible" data-theme="e" data-content-theme="e" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+                <h4 id='toggleMap'>标注地理位置</h4>
+                <select id="selCity" data-mini="true">
+                    <option value="西安">西安</option>
+                    <option value="北京">北京</option>
+                    <option vlaue="上海">上海</option>
+                </select>
+                <div id="e-container" style="height: 400px; width: 300px"></div>
+            </div>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="e-email">邮箱 </label>
+            <input id="e-email" type="email" data-clear-btn="true"/>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="e-tel">电话 </label>
+            <input id="e-tel" type="tel" data-clear-btn="true"/>
+        </div>
+    </div>
+    <script src="Scripts/edit.js"></script>
+</div>
