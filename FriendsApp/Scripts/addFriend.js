@@ -1,5 +1,4 @@
-﻿/// <reference path="../addFriend.html" />
-var addFriend = {
+﻿var addFriend = {
     addressPoint: { lng: 0, lat: 0 },
     
     img: document.getElementById('af-img'),
@@ -20,10 +19,11 @@ var addFriend = {
                 var name = contact.displayName ? contact.displayName : '';
                 var tel = contact.phoneNumbers ? contact.phoneNumbers[0].value : '';
                 var email = contact.emails ? contact.emails[0].value : '';
-                contactListHtml += '<li data-theme="d" data-icon="check"><a href="#" onclick="fillFields()" data-name="' +
+                contactListHtml += '<li data-theme="d" data-icon="check"><a href="#" class="fillFields" data-name="' +
                     name + '" data-tel="' + tel + '" data-email="' + email + '">' + name + '</a></li>';
             }
         }
+        $('.fillFields').on('click', this.fillFields);
         $('#contactList').html(contactListHtml);
         $("#contactList").listview("refresh");
     },
@@ -33,13 +33,13 @@ var addFriend = {
     },
 
     showPicFromUrl: function (imgUrl) {
-        addFriend.img.style.display = 'block';
-        addFriend.img.src = imgUrl;
+        this.img.style.display = 'block';
+        this.img.src = imgUrl;
     },
 
     showPicFromData: function (picData) {
-        addFriend.img.style.display = 'block';
-        addFriend.img.src = 'data:image/jpeg;base64,' + picData;
+        this.img.style.display = 'block';
+        this.img.src = 'data:image/jpeg;base64,' + picData;
     },
 
     onError: function (msg) {
@@ -51,12 +51,12 @@ var addFriend = {
         map.centerAndZoom('西安', 15);
         map.addEventListener('click',
             function (e) {
-                addressPoint.lng = e.point.lng;
-                addressPoint.lat = e.point.lat;
+                addFriend.addressPoint.lng = e.point.lng;
+                addFriend.addressPoint.lat = e.point.lat;
                 map.clearOverlays();
                 var marker =
                     new BMap.Marker(
-                        new BMap.Point(addressPoint.lng, addressPoint.lat));
+                        new BMap.Point(addFriend.addressPoint.lng, addFriend.addressPoint.lat));
                 map.addOverlay(marker);
                 alert('标注成功');
             });
@@ -71,14 +71,14 @@ var addFriend = {
             var options = new ContactFindOptions();
             options.multiple = true;
             var filter = ["displayName", "phoneNumbers", "emails"];
-            navigator.contacts.find(filter, onGetAllContactsSuccess, onGetAllContactsError, options);
+            navigator.contacts.find(filter, addFriend.onGetAllContactsSuccess, addFriend.onGetAllContactsError, options);
         });
 
         $('#takePic').bind('click', function () {
-            navigator.camera.getPicture(showPicFromData, onError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL });
+            navigator.camera.getPicture(addFriend.showPicFromData, addFriend.onError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL });
         });
         $('#getPic').bind('click', function () {
-            navigator.camera.getPicture(showPicFromUrl, onError, { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
+            navigator.camera.getPicture(addFriend.showPicFromUrl, addFriend.onError, { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
         });
 
         $('#af-save').bind('click', function () {
@@ -90,7 +90,8 @@ var addFriend = {
             var id = FriendsApp.Common.newGuid();
             var friend = new FriendsApp.Friend(id, name, imgSrc, age, addFriend.addressPoint, email, tel);
             FriendsApp.FriendDataAccess.add(friend);
-            location.href = 'index.html';
+            alert('添加成功');
+            window.location.href = 'index.html';
         });
     }
 };

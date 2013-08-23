@@ -1,16 +1,15 @@
-﻿/// <reference path="../addFriend.html" />
-var edit = {
+﻿var edit = {
     addressPoint: { lng: 0, lat: 0 },
     img: document.getElementById('e-img'),
 
     showPicFromUrl: function (imgUrl) {
-        edit.img.style.display = 'block';
-        edit.img.src = imgUrl;
+        this.img.style.display = 'block';
+        this.img.src = imgUrl;
     },
 
     showPicFromData: function (picData) {
-        edit.img.style.display = 'block';
-        edit.img.src = 'data:image/jpeg;base64,' + picData;
+        this.img.style.display = 'block';
+        this.img.src = 'data:image/jpeg;base64,' + picData;
     },
 
     onError: function (msg) {
@@ -33,7 +32,7 @@ var edit = {
                 map.clearOverlays();
                 var marker =
                     new BMap.Marker(
-                        new BMap.Point(addressPoint.lng, addressPoint.lat));
+                        new BMap.Point(edit.addressPoint.lng, edit.addressPoint.lat));
                 map.addOverlay(marker);
                 alert('标注成功');
             });
@@ -44,11 +43,11 @@ var edit = {
         var friend = FriendsApp.FriendDataAccess.getCurrentFriend();
         if (friend) {
             $('#e-name').val(friend.name ? friend.name : '');
-            $('#e-pic').attr('src', friend.img ? friend.img : '');
+            $('#e-pic').attr('src', friend.imgSrc ? friend.imgSrc : '');
             $('#e-age').val(friend.age ? friend.age : '');
             $('#e-email').val(friend.email ? friend.email : '');
             $('#e-tel').val(friend.tel ? friend.tel : '');
-            initMap(friend.address.lng, friend.address.lat);
+            this.initMap(friend.addressPoint.lng, friend.addressPoint.lat);
         }
 
         $('#selCity').change(function () {
@@ -57,11 +56,11 @@ var edit = {
        
 
         $('#takePic').bind('click', function () {
-            navigator.camera.getPicture(showPicFromData, onError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL });
+            navigator.camera.getPicture(edit.showPicFromData, edit.onError, { quality: 50, destinationType: navigator.camera.DestinationType.DATA_URL });
         });
         
         $('#getPic').bind('click', function () {
-            navigator.camera.getPicture(showPicFromUrl, onError, { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
+            navigator.camera.getPicture(edit.showPicFromUrl, edit.onError, { quality: 50, destinationType: navigator.camera.DestinationType.FILE_URI, sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY });
         });
 
         $('#e-save').bind('click', function () {

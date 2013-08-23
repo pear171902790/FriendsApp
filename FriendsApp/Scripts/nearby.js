@@ -1,13 +1,13 @@
 ﻿var nearby = {
     getInfo: function(friend) {
-        return '<div><img style="float:left;margin:4px" src="' + friend.img + '" width="50" height="50"/>' +
+        return '<div><img style="float:left;margin:4px" src="' + friend.imgSrc + '" width="50" height="50"/>' +
             '<h4>' + friend.name + '</h4><p>电话 <a href="tel:' + friend.tel + '">' + friend.tel + '</a>, 邮箱 ' + friend.email + '</p></div>';
     },
 
     addFriendsLabel: function(map, friend) {
-        var point = new BMap.Point(friend.address.lng, friend.address.lat);
+        var point = new BMap.Point(friend.addressPoint.lng, friend.addressPoint.lat);
         var label = new BMap.Label(friend.name);
-        var infoWindow = new BMap.InfoWindow(getInfo(friend), { width: 100, height: 100, enableMessage: false });
+        var infoWindow = new BMap.InfoWindow(this.getInfo(friend), { width: 100, height: 100, enableMessage: false });
         var marker = new BMap.Marker(point);
         marker.setLabel(label);
         map.addOverlay(marker);
@@ -27,7 +27,7 @@
         if (friends) {
             for (var i = 0; i < friends.length; i++) {
                 var friend = friends[i];
-                addFriendsLabel(map, friend);
+                this.addFriendsLabel(map, friend);
             }
         }
     },
@@ -43,11 +43,11 @@
     },
 
     onDeviceReady: function () {
-        navigator.geolocation.getCurrentPosition(onGetCurrentPositionSuccess, onGetCurrentPositionError);
+        navigator.geolocation.getCurrentPosition(this.onGetCurrentPositionSuccess, this.onGetCurrentPositionError);
     },
 
     init: function () {
-        document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("deviceready", this.onDeviceReady, false);
     }
 };
 
