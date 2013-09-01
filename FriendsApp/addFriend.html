@@ -8,7 +8,7 @@
         <a href="#af-contact" data-role="button" data-rel="popup" data-position-to="window" data-transition="fade" id="selectFromContacts">从联系人中选择</a>
         <div data-role="popup" id="af-contact" data-overlay-theme="a" data-theme="d" data-corners="false">
             <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right" id="closeContactList">Close</a>
-            <div style="width: 300px; height: 400px; overflow: scroll">
+            <div style="overflow: scroll" class="auto-height-width">
                 <ul data-role="listview" data-inset="true" id="contactList" data-theme="d">
                 </ul>
             </div>
@@ -35,7 +35,7 @@
                     <option value="北京">北京</option>
                     <option vlaue="上海">上海</option>
                 </select>
-                <div id="af-container" style="height: 400px; width: 300px"></div>
+                <div id="af-container" class="auto-height-width"></div>
             </div>
         </div>
         <div data-role="fieldcontain">
@@ -47,5 +47,6 @@
             <input id="af-tel" type="tel" data-clear-btn="true"/>
         </div>
     </div>
+
     <script src="Scripts/addFriend.js"></script>
 </div>

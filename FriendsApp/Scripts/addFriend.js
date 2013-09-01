@@ -1,4 +1,7 @@
-﻿var addFriend = {
+﻿
+
+
+var addFriend = {
     addressPoint: { lng: 0, lat: 0 },
     
     img: document.getElementById('af-img'),
@@ -63,6 +66,14 @@
     },
 
     init: function () {
+		alert('aaa');
+		var autoWidth=screen.availWidth/2;
+		var autoHeight=screen.availHeight/2;
+		
+		
+		alert(autoWidth+','+autoHeight);
+		$('.auto-height-width').css({'width':autoWidth+'px','height':autoHeight+'px'});
+		
         $('#selCity').change(function () {
             map.setCenter($(this).val());
         });
